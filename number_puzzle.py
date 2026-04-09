@@ -9,7 +9,7 @@ class NumberPuzzleApp:
     TILE_SIZE = 34
     PADDING = 12
     HEADER_HEIGHT = 56
-    COLUMN_COLORS = (8, 9, 10, 12)
+    ROW_COLORS = (8, 9, 10, 12)
     WINDOW_WIDTH = PADDING * 2 + TILE_SIZE * BOARD_SIZE
     WINDOW_HEIGHT = HEADER_HEIGHT + PADDING + TILE_SIZE * BOARD_SIZE + 30
     SHUFFLE_MOVES = 320
@@ -177,7 +177,8 @@ class NumberPuzzleApp:
                 pyxel.rectb(x, y, self.TILE_SIZE - 2, self.TILE_SIZE - 2, 1)
                 continue
 
-            color = self.COLUMN_COLORS[col]
+            solved_row = (value - 1) // self.BOARD_SIZE
+            color = self.ROW_COLORS[solved_row]
             pyxel.rect(x, y, self.TILE_SIZE - 2, self.TILE_SIZE - 2, color)
             pyxel.rectb(x, y, self.TILE_SIZE - 2, self.TILE_SIZE - 2, 7)
 
