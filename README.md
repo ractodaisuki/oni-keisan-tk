@@ -1,1 +1,1 @@
-# nunber-puzzle
+# number-puzzle
