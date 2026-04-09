@@ -9,7 +9,7 @@ class NumberPuzzleApp:
     TILE_SIZE = 34
     PADDING = 12
     HEADER_HEIGHT = 56
-    FOOTER_HEIGHT = 42
+    FOOTER_HEIGHT = 54
     ROW_COLORS = (8, 9, 10, 12)
     BUTTON_WIDTH = 44
     BUTTON_HEIGHT = 18
@@ -123,8 +123,11 @@ class NumberPuzzleApp:
         if not pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
             return
 
-        if self.is_over_reset_button(pyxel.mouse_x, pyxel.mouse_y):
+        if self.is_cleared and self.is_over_reset_button(pyxel.mouse_x, pyxel.mouse_y):
             self.reset_game()
+            return
+
+        if self.is_cleared:
             return
 
         mouse_x = pyxel.mouse_x - self.PADDING
@@ -151,8 +154,8 @@ class NumberPuzzleApp:
         return int(time.time() - self.start_time)
 
     def reset_button_rect(self):
-        x = self.WINDOW_WIDTH - self.BUTTON_WIDTH - 10
-        y = 10
+        x = (self.WINDOW_WIDTH - self.BUTTON_WIDTH) // 2
+        y = self.HEADER_HEIGHT + self.TILE_SIZE * self.BOARD_SIZE + 24
         return x, y, self.BUTTON_WIDTH, self.BUTTON_HEIGHT
 
     def is_over_reset_button(self, mouse_x, mouse_y):
@@ -162,8 +165,7 @@ class NumberPuzzleApp:
     def update(self):
         pyxel.mouse(True)
         self.handle_keyboard()
-        if not self.is_cleared:
-            self.handle_mouse()
+        self.handle_mouse()
 
     def draw(self):
         pyxel.cls(1)
@@ -177,7 +179,6 @@ class NumberPuzzleApp:
         pyxel.text(12, 26, f"MOVES: {self.move_count:03}", 10)
         pyxel.text(92, 26, f"TIME: {self.elapsed_seconds():03}s", 11)
         pyxel.text(12, 40, "ARROWS/WASD OR CLICK / R:RESET", 6)
-        self.draw_reset_button()
 
     def draw_reset_button(self):
         x, y, width, height = self.reset_button_rect()
@@ -216,8 +217,8 @@ class NumberPuzzleApp:
     def draw_footer(self):
         footer_y = self.HEADER_HEIGHT + self.TILE_SIZE * self.BOARD_SIZE + 10
         if self.is_cleared:
-            pyxel.text(32, footer_y + 6, "CLEAR! PRESS N", 10)
-            pyxel.text(38, footer_y + 16, "FOR NEW GAME", 10)
+            pyxel.text(32, footer_y + 2, "CLEAR! PRESS N", 10)
+            self.draw_reset_button()
         else:
             pyxel.text(18, footer_y + 2, "ARRANGE 1-15 IN ORDER", 7)
             pyxel.text(16, footer_y + 12, "LEAVE THE LAST SPACE EMPTY", 7)
